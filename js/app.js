@@ -21,6 +21,7 @@ $(function(){
             model.currentCat = model.cats[0];
             catListView.init();
             catView.init();
+            adminView.init();
         },
 
         getCurrentCat: function() {
@@ -38,7 +39,15 @@ $(function(){
         incrementCounter: function() {
             model.currentCat.clickCount++;
             catView.render();
+        },
+
+        saveCat: function(name, imgsrc, clickcount) {
+            model.currentCat.name = name;
+            model.currentCat.imgSrc = imgsrc;
+            model.currentCat.clickCount = clickcount;
+            catView.render();
         }
+
     };
 
     let catView = {
@@ -58,7 +67,7 @@ $(function(){
             let currentCat = octpus.getCurrentCat();
             this.catNameElem.textContent = currentCat.name;
             this.catImageElem.src = currentCat.imgSrc;
-            this.countElem = currentCat.clickCount;
+            this.countElem.textContent = currentCat.clickCount;
         }
     };
 
@@ -87,5 +96,27 @@ $(function(){
         }
     };
 
+    let adminView = {
+        init: function() {
+            this.adminElem = document.getElementById('admin');
+            
+            this.render();
+        },
+
+        render: function() {
+            let cancelElem, saveElem;
+            let newCatName, newImgSrc, newClickCount;
+
+            cancelElem = document.getElementById('cancel');
+            saveElem = document.getElementById('save');
+
+            saveElem.addEventListener('click', function(){
+                newCatName = document.getElementById("name").value;
+                newImgSrc = document.getElementById("imgsrc").value;
+                newClickCount = document.getElementById("clickcnt").value;
+                octpus.saveCat(newCatName, newImgSrc, newClickCount);
+            });
+        }
+    };
     octpus.init();
 }());
